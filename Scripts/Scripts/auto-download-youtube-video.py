@@ -1,19 +1,19 @@
 import os
 from os import path
 from pathlib import Path
+from time import sleep
+
 import frontmatter
 
 # set the working to directory to the project root
 os.chdir("../")
 
 # read in the YAML frontmatter from the first file in "Inbox" folder
-with open("Inbox/2023-09-25-20-04-26", "r") as file:
+with open("Inbox/2023-09-25-20-04-26,md", "r") as file:
     post = frontmatter.load(file)
 
 # get the URL from the YAML frontmatter
 url = post["URL"]
-
-
 
 # detect if the URL is a YouTube video
 if "youtube.com" in url:
@@ -22,17 +22,22 @@ if "youtube.com" in url:
 
     # construct the command to download the video
     # TODO what current directory is the command being executed in?
-    command = f"youtube-dl.exe -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o '%(title)s.%(ext)s' https://www.youtube.com/watch?v={video_id}"
+    command = f"youtube-dl.exe -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o 'Inbox/%(title)s.%(ext)s' https://www.youtube.com/watch?v={video_id}"
 
     # execute the command
     os.system(command)
 
-# get the filename of the downloaded video
-video_filename =
+    # wait for the video to download
+    sleep(180)
 
-# rename the file to the title of the video
-with open("Inbox/2023-09-25-20-04-26", "r") as file:
-    post = frontmatter.load(file)
-    video_filename = file.basename()
-    title = post["Title"]
-    os.rename("Inbox/2023-09-25-20-04-26", f"Inbox/{title}.md")
+    # get the filename of the downloaded video
+    video_filename = Path("Inbox").glob("*.mp4")[0]
+
+    # set the title of the post to the title of the video
+    post["title"] = post["title"] + video_filename
+
+    # write the YAML frontmatter back to the file
+    frontmatter.dump(post, file)
+
+# TODO Option 2 - write the video title to H1 in the Markdown file
+
