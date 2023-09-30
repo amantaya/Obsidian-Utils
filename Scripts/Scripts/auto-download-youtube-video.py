@@ -28,12 +28,24 @@ if "youtube.com" in url:
     os.system(command)
 
     # wait for the video to download
-    # sleep(180)
+    sleep(5)
 
-    search_path: str = path.join(os.getcwd(), "*.mp4")
+    dir_path: str = os.getcwd()
+
+    for file in os.listdir(dir_path):
+        print(file)
+
+    video_filename = []
+
+    for file in os.listdir(dir_path):
+        if file.endswith(".mp4"):
+            video_filename.append(file)
+    print(video_filename)
+
+    # search_path: str = path.join(os.getcwd(), "*.mp4")
 
     # get the filename of the downloaded video
-    video_filename = glob.glob(search_path)
+    # video_filename = glob.glob(search_path)
 
     # remove any special characters from the filename
 
