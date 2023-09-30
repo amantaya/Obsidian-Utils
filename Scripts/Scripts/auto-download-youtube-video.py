@@ -1,4 +1,5 @@
 import os
+import re
 from os import path
 from pathlib import Path
 from time import sleep
@@ -11,7 +12,6 @@ os.chdir("../")
 # read in the YAML frontmatter from the first file in "Inbox" folder
 with open("Inbox/2023-09-25-20-04-26.md", "r", encoding='utf8') as file:
     post = frontmatter.load(file)
-    lines = file.readlines()
 
 # get the URL from the YAML frontmatter
 url = post["URL"]
@@ -43,12 +43,22 @@ if "youtube.com" in url:
     # get the filename of the downloaded video
     # video_filename = glob.glob(search_path)
 
-    # remove any special characters from the filename
+    # remove any forbidden characters from the filename
+    video_filename = [re.sub(r'[\\/*?:"<>|]', "", x) for x in video_filename]
+
+    # remove any non-ASCII characters from the filename
+    video_filename = [re.sub(r'[^\x00-\x7F]+', "", x) for x in video_filename]
+
+    # remove spaces from the filename
+    video_filename = [x.replace(' ', '-') for x in video_filename]
+
+    # remove the file extension from the filename
+    video_filename = [os.path.splitext(x)[0] for x in video_filename]
 
     # write the video filename to the H1 in the Markdown file
-    for line in lines:
+    for line in post.content.splitlines():
         if line.startswith('# '):
-            line = line + video_filename
+            line = line + video_filename[0]
             print(line)
 
 # TODO Option 2 - write the video title to H1 in the Markdown file
