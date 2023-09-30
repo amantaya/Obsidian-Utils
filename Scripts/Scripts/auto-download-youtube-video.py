@@ -13,42 +13,37 @@ with open("Inbox/2023-09-25-20-04-26.md", "r", encoding='utf8') as file:
     post = frontmatter.load(file)
     lines = file.readlines()
 
-
 # get the URL from the YAML frontmatter
 url = post["URL"]
 
+dir_path: str = os.getcwd()
+
 # detect if the URL is a YouTube video
 if "youtube.com" in url:
-
     # construct the command to download the video
     # TODO what current directory is the command being executed in?
-    command = f"youtube-dl.exe -f best -o '%(title)s.%(ext)s' {url}"
+    command = f"youtube-dl.exe -f best -o %(title)s.%(ext)s {url}"
 
     # execute the command
     os.system(command)
 
     # wait for the video to download
-    sleep(5)
-
-    dir_path: str = os.getcwd()
-
-    for file in os.listdir(dir_path):
-        print(file)
+    # sleep(5)
 
     video_filename = []
 
     for file in os.listdir(dir_path):
-        if file.endswith(".mp4"):
+        if file.endswith('.mp4'):
             video_filename.append(file)
+
     print(video_filename)
 
-    # search_path: str = path.join(os.getcwd(), "*.mp4")
+    # search_path: str = path.join(dir_path, "*.mp4")
 
     # get the filename of the downloaded video
     # video_filename = glob.glob(search_path)
 
     # remove any special characters from the filename
-
 
     # write the video filename to the H1 in the Markdown file
     for line in lines:
@@ -56,6 +51,4 @@ if "youtube.com" in url:
             line = line + video_filename
             print(line)
 
-
 # TODO Option 2 - write the video title to H1 in the Markdown file
-
