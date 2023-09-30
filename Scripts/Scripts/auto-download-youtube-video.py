@@ -3,6 +3,7 @@ from os import path
 from pathlib import Path
 from time import sleep
 import frontmatter
+import glob
 
 # set the working to directory to the project root
 os.chdir("../")
@@ -21,16 +22,21 @@ if "youtube.com" in url:
 
     # construct the command to download the video
     # TODO what current directory is the command being executed in?
-    command = f"youtube-dl.exe -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best' -o 'Inbox/%(title)s.%(ext)s' {url}"
+    command = f"youtube-dl.exe -f best -o '%(title)s.%(ext)s' {url}"
 
     # execute the command
     os.system(command)
 
     # wait for the video to download
-    sleep(180)
+    # sleep(180)
+
+    search_path: str = path.join(os.getcwd(), "*.mp4")
 
     # get the filename of the downloaded video
-    video_filename = Path("Inbox").glob("*.mp4")[0]
+    video_filename = glob.glob(search_path)
+
+    # remove any special characters from the filename
+
 
     # write the video filename to the H1 in the Markdown file
     for line in lines:
