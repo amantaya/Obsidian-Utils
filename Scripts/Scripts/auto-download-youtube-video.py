@@ -9,7 +9,9 @@ import glob
 # set the working to directory to the project root
 os.chdir("../")
 
-dir_path: str = os.getcwd()
+project_directory: str = os.getcwd()
+
+notes_directory: str = os.path.join(project_directory, "Inbox")
 
 markdown_files = []
 
@@ -43,7 +45,7 @@ for file in markdown_files:
     # grab the orginal filename of the video
     original_video_filename = []
 
-    for file in os.listdir(dir_path):
+    for file in os.listdir(project_directory):
         if file.endswith('.mp4'):
             original_video_filename.append(file)
 
