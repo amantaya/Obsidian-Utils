@@ -9,17 +9,30 @@ import glob
 # set the working to directory to the project root
 os.chdir("../")
 
-# read in the YAML frontmatter from the first file in "Inbox" folder
-with open("Inbox/2023-09-25-20-04-26.md", "r", encoding='utf8') as file:
-    post = frontmatter.load(file)
-
-# get the URL from the YAML frontmatter
-url = post["URL"]
-
 dir_path: str = os.getcwd()
 
-# detect if the URL is a YouTube video
-if "youtube.com" in url:
+markdown_files = []
+
+# list all Markdown files in the "Inbox" folder
+for file in os.listdir(dir_path):
+    if file.endswith('.md'):
+        markdown_files.append(file)
+
+# remove files that don't have a YouTube link in the "URL" of the YAML frontmatter
+for file in markdown_files:
+    with open(f"Inbox/{file}", "r", encoding='utf8') as file:
+        post = frontmatter.load(file)
+        if "https://youtube.com" not in post["URL"]:
+            markdown_files.remove(file)
+
+for file in markdown_files:
+    # read in the YAML frontmatter from the first file in "Inbox" folder
+    with open(f"Inbox/{markdown_files[file]}", "r", encoding='utf8') as file:
+        post = frontmatter.load(file)
+
+    # get the URL from the YAML frontmatter
+    url = post["URL"]
+
     # construct the command to download the video
     # TODO what current directory is the command being executed in?
     command = f"youtube-dl.exe -f best -o %(title)s.%(ext)s {url}"
