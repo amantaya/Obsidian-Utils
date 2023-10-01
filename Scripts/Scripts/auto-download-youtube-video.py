@@ -68,7 +68,14 @@ for file in markdown_files:
     new_video_filename = [x.replace(' ', '-') for x in new_video_filename]
 
     # remove the file extension from the filename
-    video_filename = [os.path.splitext(x)[0] for x in video_filename]
+    new_video_filename = [os.path.splitext(x)[0] for x in new_video_filename]
+
+    # TODO check if the file already exists before renaming
+    # rename and move the video file
+    os.rename(original_video_filename[0], f"Attachments/{new_video_filename[0]}.mp4")
+
+    # grab the original H1 title
+    original_h1 = post.content.splitlines()[0]
 
     # write the video filename to the H1 in the Markdown file
     post.content = post.content.replace(post.content.splitlines()[0], f"{original_h1} YouTube Video - {new_h1[0]}")
@@ -81,4 +88,21 @@ for file in markdown_files:
 
     frontmatter.dump(post, f"Inbox/{markdown_file}")
 
-# TODO Option 2 - write the video title to H1 in the Markdown file
+    # add a link to the video in the Markdown file
+    # this reads in the Markdown file as a list
+    with open(f"Inbox/{markdown_file}", "r", encoding='utf8') as file:
+        lines = file.readlines()
+
+    # TODO find URLs that have "youtube.com" in the body of the markdown file
+    # TODO find URLs that have "youtu.be" in the body of the markdown file
+
+    with open(f"Inbox/{markdown_file}", "w", encoding='utf8') as file:
+        for line in lines:
+            if line.startswith("# "):
+                line = line + f"\n![](Attachments/{new_video_filename[0]}.mp4)"
+            file.write(line)
+
+    # TODO write a git commit message that includes the original filename and the new filename
+
+    # move the Markdown file to the "Resources" folder
+    # os.rename("Inbox/2023-09-25-20-04-26.md", "Resources/2023-09-25-20-04-26.md")
