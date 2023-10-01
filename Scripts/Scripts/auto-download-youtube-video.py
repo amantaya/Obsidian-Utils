@@ -40,38 +40,45 @@ for file in markdown_files:
     # execute the command
     os.system(command)
 
-    # wait for the video to download
-    # sleep(5)
-
-    video_filename = []
+    # grab the orginal filename of the video
+    original_video_filename = []
 
     for file in os.listdir(dir_path):
         if file.endswith('.mp4'):
-            video_filename.append(file)
+            original_video_filename.append(file)
 
-    print(video_filename)
-
-    # search_path: str = path.join(dir_path, "*.mp4")
-
-    # get the filename of the downloaded video
-    # video_filename = glob.glob(search_path)
+    print(original_video_filename)
 
     # remove any forbidden characters from the filename
-    video_filename = [re.sub(r'[\\/*?:"<>|]', "", x) for x in video_filename]
+    new_video_filename = [re.sub(r'[\\/*?:"<>|]', "", x) for x in original_video_filename]
 
     # remove any non-ASCII characters from the filename
-    video_filename = [re.sub(r'[^\x00-\x7F]+', "", x) for x in video_filename]
+    new_video_filename = [re.sub(r'[^\x00-\x7F]+', "", x) for x in new_video_filename]
+
+    # remove "!" from the filename
+    new_video_filename = [x.replace('!', '') for x in new_video_filename]
+
+    # remove #" from the filename
+    new_video_filename = [x.replace('#', '') for x in new_video_filename]
+
+    # create a filename for the markdown h1 header based on the video filename
+    new_h1 = [x.replace('.mp4', '') for x in new_video_filename]
 
     # remove spaces from the filename
-    video_filename = [x.replace(' ', '-') for x in video_filename]
+    new_video_filename = [x.replace(' ', '-') for x in new_video_filename]
 
     # remove the file extension from the filename
     video_filename = [os.path.splitext(x)[0] for x in video_filename]
 
     # write the video filename to the H1 in the Markdown file
-    for line in post.content.splitlines():
-        if line.startswith('# '):
-            line = line + video_filename[0]
-            print(line)
+    post.content = post.content.replace(post.content.splitlines()[0], f"{original_h1} YouTube Video - {new_h1[0]}")
+
+    # write YouTube video to YAML frontmatter
+    post['item type'] = 'YouTube video'
+
+    # write the YAML frontmatter back to the Markdown file
+    print(frontmatter.dumps(post))
+
+    frontmatter.dump(post, f"Inbox/{markdown_file}")
 
 # TODO Option 2 - write the video title to H1 in the Markdown file
