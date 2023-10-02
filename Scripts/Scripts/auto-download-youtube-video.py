@@ -5,6 +5,7 @@ from pathlib import Path
 from time import sleep
 import frontmatter
 import glob
+import yaml
 
 # set the working to directory to the project root
 os.chdir("../")
@@ -20,12 +21,16 @@ for file in os.listdir(dir_path):
     if file.endswith('.md'):
         markdown_files.append(file)
 
-# remove files that don't have a YouTube link in the "URL" of the YAML frontmatter
+# detect any files with invalid YAML frontmatter
 for file in markdown_files:
     with open(f"Inbox/{file}", "r", encoding='utf8') as file:
-        post = frontmatter.load(file)
-        if "https://youtube.com" not in post["URL"]:
-            markdown_files.remove(file)
+        yaml.safe_load_all(file)
+
+# TODO check for files that are missing the YAML frontmatter keys specified in the template
+
+# TODO this fails of the file is missing the YAML frontmatter key "URL"
+# initialize an empty list to store the markdown files that have a value that is not None in the key "URL"
+markdown_files_with_valid_url_key_value = []
 
 for file in markdown_files:
     # read in the YAML frontmatter from the first file in "Inbox" folder
