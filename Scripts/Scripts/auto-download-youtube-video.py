@@ -23,7 +23,7 @@ for file in os.listdir(notes_directory):
 
 # detect any files with invalid YAML frontmatter
 for file in markdown_files:
-    with open(f"Inbox/{file}", "r", encoding='utf8') as f:
+    with open(os.path.join(notes_directory, file), "r", encoding='utf8') as f:
         yaml.safe_load_all(f)
 
 # TODO check for files that are missing the YAML frontmatter keys specified in the template
@@ -33,7 +33,7 @@ for file in markdown_files:
 markdown_files_with_YAML_value: list = []
 
 for file in markdown_files:
-    with open(f"Inbox/{file}", "r", encoding='utf8') as f:
+    with open(os.path.join(notes_directory, file), "r", encoding='utf8') as f:
         post = frontmatter.load(f)
         if post["URL"] is not None:
             markdown_files_with_YAML_value.append(file)
@@ -43,15 +43,15 @@ markdown_files_with_youtube_url: list = []
 
 # remove files that don't have a YouTube link in the "URL" of the YAML frontmatter
 for file in markdown_files_with_YAML_value:
-    with open(f"Inbox/{file}", "r", encoding='utf8') as f:
+    with open(os.path.join(notes_directory, file), "r", encoding='utf8') as f:
             post = frontmatter.load(f)
             if "youtube.com" in post["URL"]:
                 markdown_files_with_youtube_url.append(file)
 
 for file in markdown_files_with_youtube_url:
     # read in the YAML frontmatter from the first file in "Inbox" folder
-    with open(f"Inbox/{file}", "r", encoding='utf8') as file:
-        post = frontmatter.load(file)
+    with open(os.path.join(notes_directory, file), "r", encoding='utf8') as f:
+        post = frontmatter.load(f)
 
     # get the URL from the YAML frontmatter
     url = post["URL"]
