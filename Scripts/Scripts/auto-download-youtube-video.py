@@ -94,6 +94,8 @@ for file in markdown_files_with_youtube_url:
     if not os.path.exists(f"Attachments/{new_video_filename[0]}.mp4"):
         os.rename(original_video_filename[0], f"Attachments/{new_video_filename[0]}.mp4")
 
+    print(f"Downloaded {new_video_filename[0]}.mp4")
+
     # grab the original H1 title
     original_h1 = post.content.splitlines()[0]
 
