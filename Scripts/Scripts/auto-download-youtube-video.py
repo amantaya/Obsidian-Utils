@@ -41,9 +41,6 @@ for file in markdown_files:
 # initialize an empty list to store the markdown files that have a value of "youtube.com" in the  YAML key "URL"
 markdown_files_with_youtube_url: list = []
 
-# TODO find URLs that have "youtube.com" in the body of the markdown file
-# TODO find URLs that have "youtu.be" in the body of the markdown file
-
 # remove files that don't have a YouTube link in the "URL" of the YAML frontmatter
 for file in markdown_files_with_YAML_value:
     with open(f"Inbox/{file}", "r", encoding='utf8') as f:
