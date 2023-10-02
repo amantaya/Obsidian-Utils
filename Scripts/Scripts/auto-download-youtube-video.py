@@ -72,8 +72,6 @@ for file in markdown_files_with_youtube_url:
         if files.endswith('.mp4'):
             original_video_filename.append(files)
 
-    print(original_video_filename)
-
     # remove any forbidden characters from the filename
     new_video_filename = [re.sub(r'[\\/*?:"<>|]', "", x) for x in original_video_filename]
 
