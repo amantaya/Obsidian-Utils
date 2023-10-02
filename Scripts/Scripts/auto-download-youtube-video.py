@@ -1,8 +1,5 @@
 import os
 import re
-from os import path
-from pathlib import Path
-from time import sleep
 import frontmatter
 import glob
 import yaml
