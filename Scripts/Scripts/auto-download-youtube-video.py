@@ -97,8 +97,9 @@ for file in markdown_files_with_youtube_key_value:
     new_video_filename = [os.path.splitext(x)[0] for x in new_video_filename]
 
     # TODO check if the file already exists before renaming
-    # rename and move the video file
-    os.rename(original_video_filename[0], f"Attachments/{new_video_filename[0]}.mp4")
+    # check if the file already exists before renaming
+    if not os.path.exists(f"Attachments/{new_video_filename[0]}.mp4"):
+        os.rename(original_video_filename[0], f"Attachments/{new_video_filename[0]}.mp4")
 
     # grab the original H1 title
     original_h1 = post.content.splitlines()[0]
