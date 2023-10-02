@@ -23,8 +23,6 @@ for file in markdown_files:
     with open(os.path.join(notes_directory, file), "r", encoding='utf8') as f:
         yaml.safe_load_all(f)
 
-# TODO check for files that are missing the YAML frontmatter keys specified in the template
-
 # TODO this fails of the file is missing the YAML frontmatter key "URL"
 # initialize an empty list to store the markdown files that have a value that is not None in the key "URL"
 markdown_files_with_YAML_value: list = []
