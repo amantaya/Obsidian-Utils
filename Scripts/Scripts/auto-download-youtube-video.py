@@ -14,7 +14,7 @@ project_directory: str = os.getcwd()
 
 notes_directory: str = os.path.join(project_directory, "Inbox")
 
-markdown_files = []
+markdown_files: list = []
 
 # list all Markdown files in the "Inbox" folder
 for file in os.listdir(notes_directory):
