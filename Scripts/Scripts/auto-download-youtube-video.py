@@ -17,7 +17,7 @@ notes_directory: str = os.path.join(project_directory, "Inbox")
 markdown_files = []
 
 # list all Markdown files in the "Inbox" folder
-for file in os.listdir(dir_path):
+for file in os.listdir(notes_directory):
     if file.endswith('.md'):
         markdown_files.append(file)
 
