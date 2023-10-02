@@ -66,7 +66,7 @@ for file in markdown_files_with_youtube_key_value:
     # execute the command
     os.system(command)
 
-    # grab the orginal filename of the video
+    # grab the original filename of the video
     original_video_filename = []
 
     for file in os.listdir(project_directory):
