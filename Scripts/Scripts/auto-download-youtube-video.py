@@ -110,22 +110,19 @@ for file in markdown_files_with_youtube_key_value:
     # write YouTube video to YAML frontmatter
     post['item type'] = 'YouTube video'
 
+    # break the string into a list of lines
+    post_content_list = post.content.splitlines(True)
+
+    # insert the list item right after the H1
+    post_content_list.insert(1, f"\n![](Attachments/{new_video_filename[0]}.mp4)\n")
+
+    # join the list back into a string
+    post.content = "".join(post_content_list)
+
     # write the YAML frontmatter back to the Markdown file
     print(frontmatter.dumps(post))
 
-    frontmatter.dump(post, f"Inbox/{markdown_file}")
-
-    # add a link to the video in the Markdown file
-    # this reads in the Markdown file as a list
-    # TODO instead of reading and writing the text file, modify the post content directly
-    with open(f"Inbox/{file}", "r", encoding='utf8') as file:
-        lines = file.readlines()
-
-    with open(f"Inbox/{file}", "w", encoding='utf8') as file:
-        for line in lines:
-            if line.startswith("# "):
-                line = line + f"\n![](Attachments/{new_video_filename[0]}.mp4)"
-            file.write(line)
+    frontmatter.dump(post, markdown_files_with_youtube_key_value[0])
 
     # TODO write a git commit message that includes the original filename and the new filename
 
