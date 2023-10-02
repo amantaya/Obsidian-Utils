@@ -23,8 +23,8 @@ for file in os.listdir(notes_directory):
 
 # detect any files with invalid YAML frontmatter
 for file in markdown_files:
-    with open(f"Inbox/{file}", "r", encoding='utf8') as file:
-        yaml.safe_load_all(file)
+    with open(f"Inbox/{file}", "r", encoding='utf8') as f:
+        yaml.safe_load_all(f)
 
 # TODO check for files that are missing the YAML frontmatter keys specified in the template
 
