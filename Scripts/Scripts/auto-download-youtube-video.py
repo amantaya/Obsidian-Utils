@@ -117,13 +117,11 @@ for file in markdown_files_with_youtube_key_value:
 
     # add a link to the video in the Markdown file
     # this reads in the Markdown file as a list
-    with open(f"Inbox/{markdown_file}", "r", encoding='utf8') as file:
+    # TODO instead of reading and writing the text file, modify the post content directly
+    with open(f"Inbox/{file}", "r", encoding='utf8') as file:
         lines = file.readlines()
 
-    # TODO find URLs that have "youtube.com" in the body of the markdown file
-    # TODO find URLs that have "youtu.be" in the body of the markdown file
-
-    with open(f"Inbox/{markdown_file}", "w", encoding='utf8') as file:
+    with open(f"Inbox/{file}", "w", encoding='utf8') as file:
         for line in lines:
             if line.startswith("# "):
                 line = line + f"\n![](Attachments/{new_video_filename[0]}.mp4)"
