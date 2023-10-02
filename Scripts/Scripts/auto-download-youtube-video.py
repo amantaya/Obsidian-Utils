@@ -69,9 +69,11 @@ for file in markdown_files_with_youtube_key_value:
     # grab the original filename of the video
     original_video_filename = []
 
-    for file in os.listdir(project_directory):
-        if file.endswith('.mp4'):
-            original_video_filename.append(file)
+    # TODO change to glob.glob to search for a file with a specific extension
+    # this inadventaently overwrites the {file} variable from the for loop
+    for files in os.listdir(project_directory):
+        if files.endswith('.mp4'):
+            original_video_filename.append(files)
 
     print(original_video_filename)
 
