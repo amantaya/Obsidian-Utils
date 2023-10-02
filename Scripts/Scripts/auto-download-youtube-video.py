@@ -14,6 +14,8 @@ project_directory: str = os.getcwd()
 
 notes_directory: str = os.path.join(project_directory, "Inbox")
 
+# TODO add the "Inbox" folder to the path in the markdown_files list comprehension
+
 markdown_files = []
 
 # list all Markdown files in the "Inbox" folder
@@ -110,11 +112,6 @@ for file in markdown_files_with_youtube_key_value:
     # write YouTube video to YAML frontmatter
     post['item type'] = 'YouTube video'
 
-    # write the YAML frontmatter back to the Markdown file
-    print(frontmatter.dumps(post))
-
-    frontmatter.dump(post, f"Inbox/{markdown_file}")
-
     # add a link to the video in the Markdown file
     # this reads in the Markdown file as a list
     # TODO instead of reading and writing the text file, modify the post content directly
@@ -126,6 +123,8 @@ for file in markdown_files_with_youtube_key_value:
             if line.startswith("# "):
                 line = line + f"\n![](Attachments/{new_video_filename[0]}.mp4)"
             file.write(line)
+
+    frontmatter.dump(post, f"Inbox/{file}")
 
     # TODO write a git commit message that includes the original filename and the new filename
 
