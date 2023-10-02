@@ -93,7 +93,7 @@ for file in markdown_files_with_youtube_key_value:
     new_h1 = [x.replace('.mp4', '') for x in new_video_filename]
 
     # remove spaces from the filename
-    new_video_filename = [x.replace(' ', '-') for x in new_video_filename]
+    # new_video_filename = [x.replace(' ', '-') for x in new_video_filename]
 
     # remove the file extension from the filename
     new_video_filename = [os.path.splitext(x)[0] for x in new_video_filename]
