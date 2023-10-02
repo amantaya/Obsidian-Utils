@@ -33,6 +33,25 @@ for file in markdown_files:
 markdown_files_with_valid_url_key_value = []
 
 for file in markdown_files:
+    with open(f"Inbox/{file}", "r", encoding='utf8') as f:
+        post = frontmatter.load(f)
+        if post["URL"] is not None:
+            markdown_files_with_valid_url_key_value.append(file)
+
+# initialize an empty list to store the markdown files that have a value of "youtube.com" in the key "URL"
+markdown_files_with_youtube_key_value = []
+
+# TODO find URLs that have "youtube.com" in the body of the markdown file
+# TODO find URLs that have "youtu.be" in the body of the markdown file
+
+# remove files that don't have a YouTube link in the "URL" of the YAML frontmatter
+for file in markdown_files_with_valid_url_key_value:
+    with open(f"Inbox/{file}", "r", encoding='utf8') as f:
+            post = frontmatter.load(f)
+            if "youtube.com" in post["URL"]:
+                markdown_files_with_youtube_key_value.append(file)
+
+for file in markdown_files_with_youtube_key_value:
     # read in the YAML frontmatter from the first file in "Inbox" folder
     with open(f"Inbox/{markdown_files[file]}", "r", encoding='utf8') as file:
         post = frontmatter.load(file)
