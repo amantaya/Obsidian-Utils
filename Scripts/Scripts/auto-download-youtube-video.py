@@ -87,9 +87,6 @@ for file in markdown_files_with_youtube_url:
     # create a filename for the markdown h1 header based on the video filename
     new_h1 = [x.replace('.mp4', '') for x in new_video_filename]
 
-    # replace spaces from the filename with underscores
-    new_video_filename = [x.replace(' ', '_') for x in new_video_filename]
-
     # remove the file extension from the filename
     new_video_filename = [os.path.splitext(x)[0] for x in new_video_filename]
 
