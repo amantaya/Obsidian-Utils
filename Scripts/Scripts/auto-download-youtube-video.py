@@ -53,19 +53,17 @@ for file in markdown_files_with_youtube_url:
 
     # construct the command to download the video
     # TODO what current directory is the command being executed in?
+    # the youtube-dl.exe file is in the project root
     command = f"youtube-dl.exe -f best -o %(title)s.%(ext)s {url}"
 
     # execute the command
     os.system(command)
 
-    # grab the original filename of the video
-    original_video_filename = []
+    # specify the file extension to search for in a directory
+    # search_path = os.path.join(project_directory, "*.mp4")
 
-    # TODO change to glob.glob to search for a file with a specific extension
-    # this inadventaently overwrites the {file} variable from the for loop
-    for files in os.listdir(project_directory):
-        if files.endswith('.mp4'):
-            original_video_filename.append(files)
+    # grab the original filename of the video
+    original_video_filename = glob.glob("*.mp4")
 
     # remove any forbidden characters from the filename
     new_video_filename = [re.sub(r'[\\/*?:"<>|]', "", x) for x in original_video_filename]
