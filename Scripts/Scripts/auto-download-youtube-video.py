@@ -53,7 +53,7 @@ for file in markdown_files_with_valid_url_key_value:
 
 for file in markdown_files_with_youtube_key_value:
     # read in the YAML frontmatter from the first file in "Inbox" folder
-    with open(f"Inbox/{markdown_files[file]}", "r", encoding='utf8') as file:
+    with open(f"Inbox/{file}", "r", encoding='utf8') as file:
         post = frontmatter.load(file)
 
     # get the URL from the YAML frontmatter
