@@ -7,7 +7,9 @@ import yaml
 # set the working to directory to the project root
 os.chdir("../")
 
-project_directory: str = os.getcwd()
+project_directory: str = "C:\\Users\\andre\\Obsidian\\Personal-Knowledge"
+
+youtube_dl_path: str = "C:/Users/andre/youtube-dl.exe"
 
 notes_directory: str = os.path.join(project_directory, "Inbox")
 
@@ -54,7 +56,7 @@ for file in markdown_files_with_youtube_url:
     # construct the command to download the video
     # TODO what current directory is the command being executed in?
     # the youtube-dl.exe file is in the project root
-    command = f"youtube-dl.exe -f best -o %(title)s.%(ext)s {url}"
+    command = f"{youtube_dl_path} -f best -o %(title)s.%(ext)s {url}"
 
     # execute the command
     os.system(command)
