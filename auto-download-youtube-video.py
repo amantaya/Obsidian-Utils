@@ -13,6 +13,8 @@ youtube_dl_path: str = "C:/Users/andre/youtube-dl.exe"
 
 notes_directory: str = os.path.join(project_directory, "Inbox")
 
+attachments_directory = os.path.join(project_directory, "Attachments")
+
 markdown_files: list = []
 
 # list all Markdown files in the "Inbox" folder
@@ -86,7 +88,7 @@ for file in markdown_files_with_youtube_url:
     new_video_filename = [os.path.splitext(x)[0] for x in new_video_filename]
 
     # check if the file already exists before renaming
-    if not os.path.exists(f"Attachments/{new_video_filename[0]}.mp4"):
-        os.rename(original_video_filename[0], f"Attachments/{new_video_filename[0]}.mp4")
+    if not os.path.exists(f"{attachments_directory}/{new_video_filename[0]}.mp4"):
+        os.rename(original_video_filename[0], f"{attachments_directory}/{new_video_filename[0]}.mp4")
 
     print(f"Downloaded {new_video_filename[0]}.mp4")
