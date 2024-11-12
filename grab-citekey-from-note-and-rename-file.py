@@ -10,11 +10,11 @@ path_to_vault = Path("C:/Users/andre/personal-knowledge")
 # change cwd to the vault directory so that the script can find the files
 os.chdir(path_to_vault)
 
-cwd = os.getcwd()
+vault_dir = os.getcwd()
 
 # create a path to the files that need to be renamed
 # by appending a sub-directory to the file path
-path_to_files = os.path.join(cwd, "Fleeting Notes")
+path_to_files = os.path.join(vault_dir, "Resources")
 
 # change cwd to where the files are located
 # because open.file will fail if files are not in cwd
