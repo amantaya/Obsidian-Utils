@@ -1,15 +1,15 @@
 import os
 import re
-import shutil
 import subprocess
 import pathlib
-import time
-import git
+from pathlib import Path
 
-# get current working directory to form the basis of the file path
-os.chdir("C:\\Users\\andre\\Obsidian\\Personal-Knowledge")
+# location of the Obsidian vault
+path_to_vault = Path("C:/Users/andre/personal-knowledge")
 
-# print(cwd)
+# change cwd to the vault directory so that the script can find the files
+os.chdir(path_to_vault)
+
 cwd = os.getcwd()
 
 # create a path to the files that need to be renamed
