@@ -30,11 +30,11 @@ note_files = os.listdir(abs_path_to_files)
 # the date and the time the file was created
 # using a regular expression
 # YYYY-MM-DD-HH-MM-SS
-def remove_prefix(file_name: str) -> str:
+def remove_date_prefix(file_name: str) -> str:
     return re.sub(pattern=r"^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}\s", repl="", string=file_name)
 
 # remove the prefix from the file name
-file_names_without_prefix = [remove_prefix(file) for file in note_files]
+file_names_without_prefix = [remove_date_prefix(file) for file in note_files]
 
 def trim_filename(file_name: str, max_length: int) -> str:
     file_path = Path(file_name)
@@ -49,24 +49,27 @@ def trim_filename(file_name: str, max_length: int) -> str:
 
 new_file_names = [trim_filename(file, 150) for file in file_names_without_prefix]
 
-for file in files_with_long_names:
+commands_list = []
+
+for file in note_files:
     src = pathlib.PureWindowsPath(os.path.join(abs_path_to_files, file))
     src = src.as_posix()
     src = re.sub(pattern='`', repl='\\\\`', string=src)
-    print(f"Original File Name: {src}")
+    new_file_name = remove_date_prefix(file)
+    new_file_name = trim_filename(new_file_name, 150)
     dst = pathlib.PureWindowsPath(os.path.join(abs_path_to_files, new_file_name))
     dst = dst.as_posix()
-    print(F"New File Name:{dst}")
-    time.sleep(3)
     commands_list.append(subprocess.list2cmdline(["git", "mv", src, dst]))
 
+os.chdir(cwd)
+
 # write the commands to a shell script
-with open("git-rename-commands.sh", "w") as f:
+with open("git-rename-commands.sh", "w", encoding="utf-8") as f:
     for command in commands_list:
         f.write(command + "\n")
 
 # add bin bash to the top of the file
-with open("git-rename-commands.sh", "r+") as f:
+with open("git-rename-commands.sh", "r+", encoding="utf-8") as f:
     content = f.read()
     f.seek(0, 0)
     f.write("#!/bin/bash\n" + content)
