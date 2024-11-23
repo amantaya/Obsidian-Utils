@@ -51,9 +51,9 @@ new_file_names = [trim_filename(file, 150) for file in file_names_without_prefix
 
 commands_list = []
 
-git_worktree = "--work-tree=$HOME/personal-knowledge"
+git_worktree = "--work-tree=$HOME/personal-knowledge/"
 
-git_dir = "--git-dir=$HOME/personal-knowledge/"
+git_dir = "--git-dir=$HOME/personal-knowledge/.git"
 
 for file in note_files:
     src = pathlib.PureWindowsPath(os.path.join(abs_path_to_files, file))
@@ -63,6 +63,7 @@ for file in note_files:
     new_file_name = trim_filename(new_file_name, 150)
     dst = pathlib.PureWindowsPath(os.path.join(abs_path_to_files, new_file_name))
     dst = dst.as_posix()
+    dst = re.sub(pattern='`', repl='\\\\`', string=dst) # escape backticks which are special characters in shell
     commands_list.append(subprocess.list2cmdline(["git", git_dir, git_worktree, "mv", src, dst]))
 
 os.chdir(cwd)
