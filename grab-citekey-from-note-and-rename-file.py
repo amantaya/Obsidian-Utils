@@ -27,8 +27,9 @@ note_files = os.listdir(abs_path_to_files)
 # remove the prefix from the file name which consists of
 # the date and the time the file was created
 # using a regular expression
+# YYYY-MM-DD-HH-MM-SS
 def remove_prefix(file_name: str) -> str:
-    return re.sub(pattern=r"^\d{4}-\d{2}-\d{2}\s\d{2}\.\d{2}\.\d{2}\s", repl="", string=file_name)
+    return re.sub(pattern=r"^\d{4}-\d{2}-\d{2}-\d{2}-\d{2}-\d{2}\s", repl="", string=file_name)
 
 # remove the prefix from the file name
 file_names_without_prefix = [remove_prefix(file) for file in note_files]
