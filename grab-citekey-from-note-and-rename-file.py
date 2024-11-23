@@ -3,79 +3,71 @@ import re
 import subprocess
 import pathlib
 from pathlib import Path
+import time
 
 # location of the Obsidian vault
-path_to_vault = Path("C:/Users/andre/personal-knowledge")
+abs_path_to_vault = Path("C:/Users/andre/personal-knowledge")
 
 # change cwd to the vault directory so that the script can find the files
-os.chdir(path_to_vault)
-
-vault_dir = os.getcwd()
+os.chdir(abs_path_to_vault)
 
 # create a path to the files that need to be renamed
 # by appending a sub-directory to the file path
-path_to_files = os.path.join(vault_dir, "Resources")
+abs_path_to_files = abs_path_to_vault / "Resources"
 
 # change cwd to where the files are located
 # because open.file will fail if files are not in cwd
 # (or you supply a full path, which will complicate the renaming process)
-os.chdir(path_to_files)
+os.chdir(abs_path_to_files)
 
 # list all the files in the subdirectory
 # some of these files we want to rename, but not all of them
-list_files = os.listdir(path_to_files)
+list_files = os.listdir(abs_path_to_files)
 
-# check the file names before renaming
-# print(list_files)
+# list the the files that have >= 255 characters in their name
+files_with_long_names = list(filter(lambda v: len(v) >= 150, list_files))
 
-# create a RegEx that matches a file with a timestamp YYYY-MM-dd-hh-mm
-# some files that do have timestamps are missing the seconds field
-pattern = re.compile(pattern='([0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2})|([0-9]{12})')
+# truncate the file names to 150 characters
+new_file_name: list = []
 
-# filter out file names that do not match the RegEx
-# do not rename files that already have timestamps
-files_without_timestamps = list(filter(lambda v: not pattern.match(v), list_files))
+commands_list: list = []
 
-# check files that we don't want renamed were filtered out correctly
-# print(files_without_timestamps)
+# remove the prefix from the file name which consists of
+# the date and the time the file was created
+# using a regular expression
+def remove_prefix(file_name: str) -> str:
+    return re.sub(pattern=r"^\d{4}-\d{2}-\d{2}\s\d{2}\.\d{2}\.\d{2}\s", repl="", string=file_name)
 
-commands_list = []
+# remove the prefix from the file name
+file_names_without_prefix = [remove_prefix(file) for file in list_files]
 
-# rename files by the line starting with "Created:" which is inside the file
-for file in files_without_timestamps:
-    with open(file, 'r', encoding='utf8') as f:
-        lines = f.readlines()
-        for line in lines:
-            if line.startswith('date created:'):
-                # extract just the time from the string
-                # TODO better to use a regex here instead of hardcoding the index
-                created_date = line[14:]
-                created_date_drop_newline = re.sub(pattern='\n', repl='', string=created_date)
-                created_date_strip_leading_and_trailing_whitespace = created_date_drop_newline.strip()
-                # replace colons and spaces with dashes to be consistent with naming convention
-                # YYYY-MM-dd-hh-mm-ss
-                created_date_replace = re.sub(pattern='(:)|( )', repl='-', string=created_date_strip_leading_and_trailing_whitespace)
-                new_filename_without_backticks = re.sub(pattern='`', repl='\'', string=file)
-                new_file_name = created_date_replace + ' ' + new_filename_without_backticks
-                # print(file)
-                # print(new_file_name)
-                src = pathlib.PureWindowsPath(os.path.join(path_to_files, file))
-                src = src.as_posix()
-                src = re.sub(pattern='`', repl='\\\\`', string=src)
-                # print(src)
-                dst = pathlib.PureWindowsPath(os.path.join(path_to_files, new_file_name))
-                dst = dst.as_posix()
-                # print(dst)
-                # src = "'%s'" % src
-                # dst = "'%s'" % dst
-                # command = fr'"%ProgramFiles%\Git\bin\bash.exe" -c "git mv {src} {dst}"'
-                # print(command)
-                # subprocess.check_output(command, shell=True)
-                # subprocess.run(["git", "mv", "-f", file, new_file_name], shell=True)
-                commands_list.append(subprocess.list2cmdline(["git", "mv", src, dst]))
 
-os.chdir(cwd)
+def trim_filename(file_name: str, max_length: int) -> str:
+    file_path = Path(file_name)
+    base_name = file_path.stem
+    ext = file_path.suffix
 
+    if len(base_name) > max_length:
+        base_name = base_name[:max_length]
+
+    new_file_name = base_name + ext
+    return new_file_name
+
+new_file_names = [trim_filename(file, 150) for file in list_files]
+
+for file in files_with_long_names:
+    new_file_name = file[:150]
+    src = pathlib.PureWindowsPath(os.path.join(abs_path_to_files, file))
+    src = src.as_posix()
+    src = re.sub(pattern='`', repl='\\\\`', string=src)
+    print(f"Original File Name: {src}")
+    dst = pathlib.PureWindowsPath(os.path.join(abs_path_to_files, new_file_name))
+    dst = dst.as_posix()
+    print(F"New File Name:{dst}")
+    time.sleep(3)
+    commands_list.append(subprocess.list2cmdline(["git", "mv", src, dst]))
+
+# write the commands to a shell script
 with open("git-rename-commands.sh", "w") as f:
     for command in commands_list:
         f.write(command + "\n")
@@ -87,4 +79,4 @@ with open("git-rename-commands.sh", "r+") as f:
     f.write("#!/bin/bash\n" + content)
 
 # run shell script to rename files
-subprocess.run(["git-rename-commands.sh"], shell=True, cwd=cwd)
+# subprocess.run(["git-rename-commands.sh"], shell=True, cwd=cwd)
