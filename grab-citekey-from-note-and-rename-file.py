@@ -22,15 +22,7 @@ os.chdir(abs_path_to_files)
 
 # list all the files in the subdirectory
 # some of these files we want to rename, but not all of them
-list_files = os.listdir(abs_path_to_files)
-
-# list the the files that have >= 255 characters in their name
-files_with_long_names = list(filter(lambda v: len(v) >= 150, list_files))
-
-# truncate the file names to 150 characters
-new_file_name: list = []
-
-commands_list: list = []
+note_files = os.listdir(abs_path_to_files)
 
 # remove the prefix from the file name which consists of
 # the date and the time the file was created
@@ -39,8 +31,7 @@ def remove_prefix(file_name: str) -> str:
     return re.sub(pattern=r"^\d{4}-\d{2}-\d{2}\s\d{2}\.\d{2}\.\d{2}\s", repl="", string=file_name)
 
 # remove the prefix from the file name
-file_names_without_prefix = [remove_prefix(file) for file in list_files]
-
+file_names_without_prefix = [remove_prefix(file) for file in note_files]
 
 def trim_filename(file_name: str, max_length: int) -> str:
     file_path = Path(file_name)
@@ -53,10 +44,9 @@ def trim_filename(file_name: str, max_length: int) -> str:
     new_file_name = base_name + ext
     return new_file_name
 
-new_file_names = [trim_filename(file, 150) for file in list_files]
+new_file_names = [trim_filename(file, 150) for file in file_names_without_prefix]
 
 for file in files_with_long_names:
-    new_file_name = file[:150]
     src = pathlib.PureWindowsPath(os.path.join(abs_path_to_files, file))
     src = src.as_posix()
     src = re.sub(pattern='`', repl='\\\\`', string=src)
