@@ -5,6 +5,8 @@ import pathlib
 from pathlib import Path
 import time
 
+cwd = os.getcwd()
+
 # location of the Obsidian vault
 abs_path_to_vault = Path("C:/Users/andre/personal-knowledge")
 
