@@ -54,7 +54,7 @@ commands_list = []
 for file in note_files:
     src = pathlib.PureWindowsPath(os.path.join(abs_path_to_files, file))
     src = src.as_posix()
-    src = re.sub(pattern='`', repl='\\\\`', string=src)
+    src = re.sub(pattern='`', repl='\\\\`', string=src) # escape backticks which are special characters in shell
     new_file_name = remove_date_prefix(file)
     new_file_name = trim_filename(new_file_name, 150)
     dst = pathlib.PureWindowsPath(os.path.join(abs_path_to_files, new_file_name))
