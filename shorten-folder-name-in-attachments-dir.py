@@ -70,7 +70,7 @@ for folder in attachment_folders:
     new_folder_name = remove_date_prefix(folder)
     new_folder_name = trim_foldername(new_folder_name, 150)
     new_abs_path = pathlib.PureWindowsPath(
-        os.path.join(abs_path_to_files, new_folder_name)
+        os.path.join(abs_path_to_attachments, new_folder_name)
     )
     new_abs_path_posix = new_abs_path.as_posix()
     new_abs_path_escaped = re.sub(
