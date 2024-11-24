@@ -94,3 +94,49 @@ with open("mkdir-commands.sh", "r+", encoding="utf-8") as f:
 
 # run shell script to rename files
 # subprocess.run(["mkdir-commands.sh"], shell=True, cwd=cwd)
+
+# now we need to move the files to the new directories
+# this is a bit more complicated because we need to
+# create a list of commands to move the files
+# and write them to a shell script
+# and then
+# run the shell script
+
+# create a list of commands to move the files
+# to the new directories
+commands_list = []
+
+for folder in attachment_folders:
+    new_folder_name = remove_date_prefix(folder)
+    new_folder_name = trim_foldername(new_folder_name, 150)
+    new_abs_path = pathlib.PureWindowsPath(
+        os.path.join(abs_path_to_attachments, new_folder_name)
+    )
+    new_abs_path_posix = new_abs_path.as_posix()
+    new_abs_path_escaped = re.sub(
+        pattern='`', repl='\\\\`', string=new_abs_path_posix
+    )
+    old_abs_path = pathlib.PureWindowsPath(
+        os.path.join(abs_path_to_attachments, folder)
+    )
+    old_abs_path_posix = old_abs_path.as_posix()
+    old_abs_path_escaped = re.sub(
+        pattern='`', repl='\\\\`', string=old_abs_path_posix
+    )
+    src = old_abs_path_escaped
+    dst = new_abs_path_escaped
+    command = subprocess.list2cmdline(
+        ["git", git_dir, git_worktree, "mv", src, dst]
+    )
+    commands_list.append(command)
+
+# write the commands to a shell script
+with open("git-mv-dir-commands.sh", "w", encoding="utf-8") as f:
+    for command in commands_list:
+        f.write(command + "\n")
+
+# add bin bash to the top of the file
+with open("git-mv-dir-commands.sh", "r+", encoding="utf-8") as f:
+    content = f.read()
+    f.seek(0, 0)
+    f.write("#!/bin/bash\n" + content)
