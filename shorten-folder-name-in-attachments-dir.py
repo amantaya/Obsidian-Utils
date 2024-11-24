@@ -14,17 +14,17 @@ os.chdir(abs_path_to_vault)
 
 # create a path to the files that need to be renamed
 # by appending a sub-directory to the file path
-abs_path_to_files = abs_path_to_vault / "Attachments"
+abs_path_to_attachments = abs_path_to_vault / "Attachments"
 
 # change cwd to where the files are located
 # because open.file will fail if files are not in cwd
 # (or you supply a full path, which will complicate the renaming process)
-os.chdir(abs_path_to_files)
+os.chdir(abs_path_to_attachments)
 
 # list all the files in the subdirectory
 # some of these files we want to rename, but not all of them
 attachment_folders_abs_path = [
-    f for f in abs_path_to_files.iterdir() if f.is_dir()
+    f for f in abs_path_to_attachments.iterdir() if f.is_dir()
 ]
 
 attachment_folders = [
