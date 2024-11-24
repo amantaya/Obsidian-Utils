@@ -106,6 +106,8 @@ with open("mkdir-commands.sh", "r+", encoding="utf-8") as f:
 # to the new directories
 commands_list = []
 
+# TODO need to move each file to the new directory
+
 for folder in attachment_folders:
     new_folder_name = remove_date_prefix(folder)
     new_folder_name = trim_foldername(new_folder_name, 150)
@@ -119,7 +121,10 @@ for folder in attachment_folders:
     old_abs_path = pathlib.PureWindowsPath(
         os.path.join(abs_path_to_attachments, folder)
     )
-    old_abs_path_posix = old_abs_path.as_posix()
+    old_abs_path_star = pathlib.PureWindowsPath(
+        os.path.join(old_abs_path, "*")
+    )
+    old_abs_path_posix = old_abs_path_star.as_posix()
     old_abs_path_escaped = re.sub(
         pattern='`', repl='\\\\`', string=old_abs_path_posix
     )
