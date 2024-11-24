@@ -106,7 +106,20 @@ with open("mkdir-commands.sh", "r+", encoding="utf-8") as f:
 # to the new directories
 commands_list = []
 
-# TODO need to move each file to the new directory
+
+def list_files_recursively(directory):
+    files_list = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            files_list.append(os.path.join(root, file))
+    return files_list
+
+
+# TODO - just move the files in the directories that need to be renamed
+# and not all the files in the attachments directory
+list_of_files_in_attachments = list_files_recursively(
+    abs_path_to_attachments
+    )
 
 for folder in attachment_folders:
     new_folder_name = remove_date_prefix(folder)
