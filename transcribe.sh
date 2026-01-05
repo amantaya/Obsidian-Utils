@@ -3,7 +3,7 @@ set -euo pipefail
 
 # Usage: ./transcribe.sh [input_file]
 # Define the input file variable (no spaces around =). Allow override via arg 1.
-file="${1:-/home/andrew/Documents/Personal-Knowledge/Attachments/Recording 20251217110117.m4a}"
+file="${1:?Error: Please provide an input file as the first argument}"
 
 # Ensure the input exists
 if [[ ! -f "$file" ]]; then
