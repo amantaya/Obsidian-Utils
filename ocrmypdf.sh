@@ -1,0 +1,1 @@
+ocrmypdf ~/Documents/Scanned\ Document.pdf ~/Documents/Scanned\ Document\ OCR.pdf
